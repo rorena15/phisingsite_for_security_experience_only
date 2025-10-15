@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>랜섬웨어 경고</title>
+    <style>
+        body { background: #000; color: #f00; text-align: center; font-family: Arial, sans-serif; margin: 0; height: 100vh; overflow: hidden; }
+        .warning { margin-top: 20vh; }
+        .warning h1 { font-size: 36px; animation: blink 1s infinite; }
+        .warning p { font-size: 24px; }
+        .timer { font-size: 28px; color: #ff0; margin-top: 20px; }
+        .exit-btn { display: none; margin-top: 20px; padding: 10px 20px; background: #fff; color: #000; border: none; cursor: pointer; }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+    <script>
+        // 풀스크린 요청 함수
+        function goFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                return elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                return elem.webkitRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                return elem.mozRequestFullScreen();
+            } else if (elem.msRequestFullscreen) {
+                return elem.msRequestFullscreen();
+            }
+            return Promise.reject('풀스크린 API 지원 안됨');
+        }
+
+        // 창 최대화 대체 함수
+        function maximizeWindow() {
+            window.moveTo(0, 0);
+            window.resizeTo(screen.width, screen.height);
+            console.log('ransomware.html: 창 최대화 완료');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('ransomware.html: 페이지 로드 완료');
+
+            // 메시지 리스너로 풀스크린 요청 처리
+            window.addEventListener('message', (event) => {
+                if (event.data.action === 'requestFullscreen') {
+                    console.log('ransomware.html: 풀스크린 요청 수신');
+                    goFullscreen()
+                        .then(() => console.log('ransomware.html: 풀스크린 성공'))
+                        .catch(err => {
+                            console.error('ransomware.html: 풀스크린 실패:', err);
+                            maximizeWindow(); // 대체로 창 최대화
+                        });
+                }
+            });
+
+            // 오디오 재생
+            const audio = document.getElementById('alertSound');
+            audio.play().catch(err => {
+                console.error('ransomware.html: 오디오 재생 실패:', err);
+            });
+
+            // 타이머 설정
+            let timeLeft = 60;
+            const timerDisplay = document.getElementById('timer');
+            setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `남은 시간: ${timeLeft}초`;
+                if (timeLeft <= 0) timeLeft = 60;
+            }, 1000);
+
+            // 로그 전송
+            fetch('/new_smising/php/log_ransomware.php', {
+                method: 'POST',
+                body: JSON.stringify({ event: 'Ransomware_Triggered_at: ' + new Date().toISOString() }),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(() => {
+                console.log('ransomware.html: 로그 전송 성공');
+            }).catch(err => {
+                console.error('ransomware.html: 로그 전송 실패:', err);
+            });
+        });
+
+        function exitSimulation() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            window.close();
+        }
+    </script>
+</head>
+<body>
+    <div class="warning">
+        <h1>모든 파일이 암호화되었습니다!</h1>
+        <p>0000 비트코인을 지불하십시오. 지불하지 않으면 파일을 영원히 잃습니다.</p> 
+        <div class="timer" id="timer">남은 시간: 60초</div>
+        <button class="exit-btn" onclick="exitSimulation()">운영진: 시뮬레이션 종료</button>
+    </div>
+    <audio id="alertSound" src="/new_smising/assets/alert.mp3" autoplay loop></audio>
+</body>
+</html>
