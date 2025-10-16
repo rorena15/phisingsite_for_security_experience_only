@@ -13,7 +13,7 @@
     </style>
     <script>
         function loadLog() {
-            fetch('/log.txt')
+            fetch('../phplog.txt')
                 .then(response => response.text())
                 .then(data => {
                     const logs = data.split('\n').filter(line => line);

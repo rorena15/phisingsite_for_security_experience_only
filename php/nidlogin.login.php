@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 취약한 비밀번호가 감지되었을 때 로그를 남깁니다.
         // 기존 nidlogin.login.php의 로그 파일 위치와 동일하게 맞춥니다.
         $logLine = date('Y-m-d H:i:s') . " - Session: {$session_id} - Weak Password Detected: {$password}\n";
-        file_put_contents(dirname(__FILE__) . '/log.txt', $logLine, FILE_APPEND | LOCK_EX);
+        file_put_contents(dirname(__FILE__) . '../log.txt', $logLine, FILE_APPEND | LOCK_EX);
 
         // cracking.html 페이지로 이동시킵니다.
         header('Location: ../pages/cracking.html');
