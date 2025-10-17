@@ -192,8 +192,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="email-body">
                             <p><strong>ID: <?php echo htmlspecialchars($userid); ?></strong> 님께,</p>
-                            <p class="alert">고객님의 계정에서 비정상적인 로그인 시도가 감지되었습니다. 즉시 아래 <strong>보안 복구 도구</strong>를 실행하여 계정의 보안 상태를 점검하시기 바랍니다.</p>
-                            <p>이 메일은 시스템에 의해 자동으로 발송되었으며, 보안 조치를 위해 48시간 이내에 복구를 진행해 주셔야 합니다.</p>
+                            <p class="alert">고객님의 계정에서 비정상적인 로그인 시도가 감지되었습니다.<br>
+                            즉시 아래 <strong>보안 복구 도구</strong>를 실행하여 계정의 보안 상태를 점검하시기 바랍니다.</p>
+                            <p>본 알림은 네이버 보안 시스템에 의해 자동으로 발송되었습니다.<br></p>
+                            <p>회원님의 계정을 안전하게 보호하기 위해 48시간 이내에 계정 보호조치를 완료해 주시기 바랍니다</p>
+                            <p></p>
                             <p style="text-align: center;">
                                 <button onclick="simulateExecution()" class="action-button">
                                     ⚠️ 보안 복구 도구 다운로드 및 실행 (권장)
@@ -202,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <p style="margin-top: 30px; font-size: 0.9em; color: #777;">
                                 *만약 이 메일이 잘못 발송되었다고 생각하시면, 네이버 고객센터(1588-3820)로 문의해 주시기 바랍니다.
                             </p>
-                            <div class="tooltip">의심스러운 첨부 파일은 절대 클릭하지 마세요!</div>
+                            <p style="margin-top: 30px; font-size: 0.9em; color: #777;">의심스러운 첨부 파일은 절대 클릭하지 마세요!</p>
                         </div>
                     </div>
                     <div id="download-overlay">
