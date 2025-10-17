@@ -42,8 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $logLine = date('Y-m-d H:i:s') . " - Session: {$session_id} - Weak Password Detected: {$password}\n";
         file_put_contents(dirname(__FILE__) . '../log.txt', $logLine, FILE_APPEND | LOCK_EX);
 
-        // cracking.html 페이지로 이동시킵니다.
-        header('Location: ../pages/cracking.html');
+        $_SESSION['cracked_id'] = $userid;
+        $_SESSION['cracked_pw'] = $password;
+
+        header('Location: cracking.php');
         exit;
     } else {
         // 안전한 비밀번호일 경우, 가짜 메일 UI를 표시합니다.
