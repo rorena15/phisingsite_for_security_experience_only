@@ -74,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>네이버 : 로그인</title>
     <link rel="stylesheet" type="text/css" href="../css/w_20241010.css?v=1">
     <link rel="stylesheet" type="text/css" href="../css/phishing.css?v=1">
+    <link rel="icon" href="../assets/favicon.ico">
     <style>
         /* 긴급 임베디드 CSS (CSS 파일 로드 실패 대비) */
         .email-container {

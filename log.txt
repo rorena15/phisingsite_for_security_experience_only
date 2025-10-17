@@ -1,2 +1,3 @@
 2025-10-17 13:00:12 - Session: tf25bm3ddt1jtng978regqdivh - 
 2025-10-17 13:01:52 - Session: tf25bm3ddt1jtng978regqdivh - 
+2025-10-17 20:41:19 - Session: 4n1k1icfnj3t4tof8ue6m639oh - Ransomware_Triggered_at: 2025-10-17T18:41:19.975Z
