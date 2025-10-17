@@ -1,3 +1,5 @@
 2025-10-17 16:49:01 - Session: 4n1k1icfnj3t4tof8ue6m639oh - Weak Password Detected: 1234
 2025-10-17 16:52:04 - Session: 4n1k1icfnj3t4tof8ue6m639oh - Weak Password Detected: iloveyou
 2025-10-17 16:52:38 - Session: 4n1k1icfnj3t4tof8ue6m639oh - Weak Password Detected: ilovejack1112114
+2025-10-17 17:28:20 - Session: ihjg28hm1s47ee8khvv8db7f7o - Weak Password Detected: zz
+2025-10-17 17:52:51 - Session: ihjg28hm1s47ee8khvv8db7f7o - Weak Password Detected: s

