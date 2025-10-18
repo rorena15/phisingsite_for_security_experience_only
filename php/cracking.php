@@ -8,7 +8,6 @@ $userId = isset($_SESSION['cracked_id']) ? htmlspecialchars($_SESSION['cracked_i
 $password = isset($_SESSION['cracked_pw']) ? htmlspecialchars($_SESSION['cracked_pw']) : 'N/A';
 
 // 보안을 위해 사용한 세션 변수는 즉시 파기합니다.
-// 이렇게 하면 페이지를 새로고침해도 이전 정보가 남지 않습니다.
 unset($_SESSION['cracked_id']);
 unset($_SESSION['cracked_pw']);
 ?>
