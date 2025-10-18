@@ -1,3 +1,4 @@
+let isDownloadTriggered = false;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('phishing.js: 스크립트 로드 완료');
 
@@ -74,7 +75,17 @@ function simulateExecution() {
     }
 }
 
+
+
 function triggerRansomware() {
+
+    if (isDownloadTriggered) {
+        console.log('phishing.js: 이미 다운로드가 시작되어 추가 실행을 차단합니다.');
+        return; // 플래그가 true이면 함수를 즉시 종료합니다.
+    }
+    // 플래그를 true로 설정해 중복 실행을 막습니다.
+    isDownloadTriggered = true;
+
     try {
         console.log('phishing.js: 파일 다운로드 시퀀스 시작');
 
