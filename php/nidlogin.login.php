@@ -36,6 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             fclose($handle); // 파일 핸들을 닫아줍니다.
         }
     }
+	
+	$MIN_LENGTH = 8;
+	if (strlen($password) < $MIN_LENGTH) { $is_password_weak = true; }
+	
     if ($is_password_weak) {
         // 취약한 비밀번호가 감지되었을 때 로그를 남깁니다.
         // 기존 nidlogin.login.php의 로그 파일 위치와 동일하게 맞춥니다.
