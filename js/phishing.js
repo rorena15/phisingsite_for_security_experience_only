@@ -78,34 +78,27 @@ function triggerRansomware() {
     try {
         console.log('phishing.js: 파일 다운로드 시퀀스 시작');
 
-        // --- 핵심 로직: 파일 다운로드 기능 ---
-        // 1. 눈에 보이지 않는 <a> 태그(링크)를 동적으로 생성합니다.
+
+
         const link = document.createElement('a');
 
         // 2. 다운로드할 파일의 경로를 지정합니다.
         link.href = '../assets/N-Vaccine_Setup.exe';
 
-        // 3. 'download' 속성을 설정하여 브라우저가 링크를 여는 대신 다운로드하도록 합니다.
         link.setAttribute('download', 'N-Vaccine_Setup.exe');
 
         // 4. 생성한 링크를 페이지에 잠시 추가했다가,
         document.body.appendChild(link);
 
-        // 5. 자바스크립트로 클릭하여 다운로드를 실행하고,
         link.click();
 
-        // 6. 역할을 다한 링크는 바로 삭제합니다.
         document.body.removeChild(link);
 
         console.log('phishing.js: 파일 다운로드 트리거 완료');
 
-/** */
-        /* --- 시나리오 흐름을 위한 조언 ---
-         * 아래 '새 창 열기' 코드는 주석 처리하는 것을 추천합니다.
-         * 왜냐하면, 체험객이 '다운로드된 파일을 직접 실행'해야
-         * 랜섬웨어에 감염된다는 흐름이 훨씬 현실적이고 교육 효과가 높기 때문입니다.
-         * 버튼 클릭 즉시 감염 화면이 뜨면 몰입이 깨질 수 있습니다.
-         * 필요하다면 아래 주석을 해제하여 사용할 수 있습니다.
+
+        /* --- 시나리오 흐름을 위한 코멘트   ---
+        /*앵간 하면 팝업 페이지 로직은 쓰지 않고 만든 프로그램으로 돌리는게 젤 나을듯
          */
         /*
         console.log('phishing.js: 랜섬웨어 페이지 열기 시도');
