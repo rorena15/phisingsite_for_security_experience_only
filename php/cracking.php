@@ -29,48 +29,81 @@ unset($_SESSION['cracked_pw']);
     <div class="console" id="console"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const consoleEl = document.getElementById('console');
+        document.addEventListener('DOMContentLoaded', async () => { // async 추가
+    const consoleEl = document.getElementById('console');
+    const userId = <?php echo json_encode($userId); ?>;
+    const crackedPassword = <?php echo json_encode($password); ?>;
 
-            //  핵심 변경점: PHP 변수를 JavaScript 변수로 가져옵니다.
-            const userId = '<?php echo $userId; ?>';
-            const crackedPassword = '<?php echo $password; ?>';
+    // 잠시 대기하는 헬퍼 함수
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-            // 동적인 메시지 생성 (이전과 동일)
-            const messages = [
-                '[*] Initiating penetration test...',
-                '[*] Target Acquired: ' + userId,
-                '[*] Loading dictionary attack module...',
-                '[*] Using wordlist: rockyou.txt (14,344,391 words)',
-                '[*] Starting attack... (ETA: 3 seconds)',
-                ' ',
-                '[+] SUCCESS! Password has been compromised!',
-                '------------------------------------------',
-                `   Account: ${userId}`,
-                `   Password: ${crackedPassword}`,
-                '------------------------------------------'
-            ];
+    // 메시지를 하나씩 출력하는 함수
+    const typeMessage = (message) => {
+        const p = document.createElement('p');
+        p.textContent = message;
+        consoleEl.appendChild(p);
+        window.scrollTo(0, document.body.scrollHeight);
+    };
+    
+    // 1. 초기 메시지 출력
+    const initialMessages = [
+        '[*] Initiating penetration test...',
+        '[*] Target Acquired: ' + userId,
+        '[*] Loading dictionary attack module...',
+        '[*] running cracking: qwecaas1^$?!23asx1x@#/123$!%(224_+{:Ll!21',
+        '[*] Starting attack...',
+    ];
 
-            let i = 0;
-            const interval = setInterval(() => {
-                if (i < messages.length) {
-                    const p = document.createElement('p');
-                    p.textContent = messages[i];
-                    if (messages[i].includes('Password:')) {
-                        p.className = 'warning';
-                    }
-                    consoleEl.appendChild(p);
-                    window.scrollTo(0, document.body.scrollHeight);
-                    i++;
-                } else {
-                    clearInterval(interval);
-                    const finalMsg = document.createElement('p');
-                    finalMsg.className = 'blink warning';
-                    finalMsg.textContent = `[!] SECURITY ALERT: Account "${userId}" has been breached. Implement a stronger password policy immediately.`;
-                    consoleEl.appendChild(finalMsg);
-                }
-            }, 500);
-        });
+    for (const msg of initialMessages) {
+        typeMessage(msg);
+        await sleep(500); // 0.5초 대기
+    }
+
+    // 2. 크래킹 진행 바 표시
+    const progressP = document.createElement('p');
+    progressP.style.color = '#fff';
+    consoleEl.appendChild(progressP);
+    
+    const crackingTimeSeconds = 5;
+    for (let progress = 0; progress <= 100; progress += 5) {
+        const bar = '='.repeat(progress / 5) + '>';
+        const spaces = ' '.repeat(20 - (progress / 5));
+        progressP.textContent = `[${bar}${spaces}] Cracking in progress... ${progress}%`;
+        window.scrollTo(0, document.body.scrollHeight);
+        if (progress === 100) {
+            progressP.textContent = `[====================>] Cracking in progress... 100%`;
+        }
+        await sleep(crackingTimeSeconds * 1000 / 20); // 전체 시간에 맞춰 대기
+    }
+
+    // 3. 최종 결과 메시지 출력
+    const finalMessages = [
+        ' ',
+        '[+] SUCCESS! Password has been compromised!',
+        '------------------------------------------',
+        `   Account: ${userId}`,
+        `   Password: ${crackedPassword}`,
+        '------------------------------------------'
+    ];
+
+    for (const msg of finalMessages) {
+        const p = document.createElement('p');
+        p.textContent = msg;
+        if (msg.includes('Password:')) {
+            p.className = 'warning';
+        }
+        consoleEl.appendChild(p);
+        window.scrollTo(0, document.body.scrollHeight);
+        await sleep(500);
+    }
+
+    // 4. 최종 경고 메시지
+    const finalWarning = document.createElement('p');
+    finalWarning.className = 'blink warning';
+    finalWarning.textContent = `[!] 보안 경고 계정 "${userId}" 는 암호 및 계정 정보가 탈취 되었습니다.
+    보안 정책에 걸맞는 암호를 생활화 하세요.`;
+    consoleEl.appendChild(finalWarning);
+});
     </script>
 </body>
 </html>
