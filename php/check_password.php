@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 session_start();
 
 $password = isset($_POST['pw']) ? trim($_POST['pw']) : '';
@@ -27,9 +27,10 @@ if ($handle) {
 
 if ($is_weak) {
     $logLine = date('Y-m-d H:i:s') . " - Session: {$session_id} - Weak Password Detected: {$password}\n";
-    file_put_contents(dirname(__FILE__) . '/../../log.txt', $logLine, FILE_APPEND | LOCK_EX);
+    file_put_contents(dirname(__FILE__) . '../log.txt', $logLine, FILE_APPEND | LOCK_EX);
     echo json_encode(['weak' => true]);
 } else {
     echo json_encode(['weak' => false]);
 }
-?>
+?> -->
+<!-- 더이상 사용 안하는 구 파일-->
