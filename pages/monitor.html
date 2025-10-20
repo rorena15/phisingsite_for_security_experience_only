@@ -3,14 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>공격자 로그 대시보드</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #1e1e20; color: #fff; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #444; padding: 10px; text-align: left; }
-        th { background: #333; }
-        .login { color: #0f0; }
-        .ransomware { color: #f00; }
-    </style>
+    <link rel="stylesheet" href="../css/moniter.css">
     <script>
         function loadLog() {
             fetch('../log.txt')
@@ -27,6 +20,7 @@
                     });
                 });
         }
+        
         setInterval(loadLog, 1000);
         window.onload = loadLog;
     </script>

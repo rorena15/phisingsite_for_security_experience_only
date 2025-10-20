@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // 로그 파일 경로
         $logLine = date('Y-m-d H:i:s') . " - Session: {$session_id} - Login Attempt - ID: {$userid}, PW: {$password}\n";
-        file_put_contents(dirname(__FILE__) . 'log.txt', $logLine, FILE_APPEND | LOCK_EX);
+        file_put_contents(dirname(__FILE__) . '/../log.txt', $logLine, FILE_APPEND | LOCK_EX);
 
         // 약한 비밀번호 체크 (직접 파일 읽기 방식으로 변경)
         $is_password_weak = false; // 취약한 비밀번호인지 여부를 저장할 변수
@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-
 
 
     if ($is_password_weak) {
