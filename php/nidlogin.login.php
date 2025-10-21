@@ -177,10 +177,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div id="wrap" class="wrap">
-        <div class="u_skip"><a href="https://www.naver.com">본문 바로가기</a></div>
+        <div class="u_skip"><a href="">본문 바로가기</a></div>
         <header class="header" role="banner">
             <div class="header_inner">
-                <a href="https://www.naver.com" class="logo" id="log.naver">
+                <a href="" class="logo" id="log.naver">
                     <h1 class="blind">NAVER</h1>
                 </a>
                 <div class="lang" id="show_locale_switch">

